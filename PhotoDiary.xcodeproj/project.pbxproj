@@ -8,17 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		2666834D2862EB93009AA72F /* PhotoDiaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2666834C2862EB93009AA72F /* PhotoDiaryApp.swift */; };
-		2666834F2862EB93009AA72F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2666834E2862EB93009AA72F /* ContentView.swift */; };
+		2666834F2862EB93009AA72F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2666834E2862EB93009AA72F /* HomeView.swift */; };
 		266683512862EB95009AA72F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 266683502862EB95009AA72F /* Assets.xcassets */; };
 		266683542862EB95009AA72F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 266683532862EB95009AA72F /* Preview Assets.xcassets */; };
+		2666835E2862F396009AA72F /* DiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2666835D2862F396009AA72F /* DiaryViewModel.swift */; };
+		266683602862F3F1009AA72F /* DiaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2666835F2862F3F1009AA72F /* DiaryModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		266683492862EB93009AA72F /* PhotoDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2666834C2862EB93009AA72F /* PhotoDiaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDiaryApp.swift; sourceTree = "<group>"; };
-		2666834E2862EB93009AA72F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2666834E2862EB93009AA72F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		266683502862EB95009AA72F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		266683532862EB95009AA72F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2666835D2862F396009AA72F /* DiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryViewModel.swift; sourceTree = "<group>"; };
+		2666835F2862F3F1009AA72F /* DiaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +56,9 @@
 			isa = PBXGroup;
 			children = (
 				2666834C2862EB93009AA72F /* PhotoDiaryApp.swift */,
-				2666834E2862EB93009AA72F /* ContentView.swift */,
+				2666835C2862F2C8009AA72F /* ViewModel */,
+				2666835B2862F2C3009AA72F /* Model */,
+				2666835A2862EEB0009AA72F /* View */,
 				266683502862EB95009AA72F /* Assets.xcassets */,
 				266683522862EB95009AA72F /* Preview Content */,
 			);
@@ -65,6 +71,30 @@
 				266683532862EB95009AA72F /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2666835A2862EEB0009AA72F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2666834E2862EB93009AA72F /* HomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2666835B2862F2C3009AA72F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2666835F2862F3F1009AA72F /* DiaryModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		2666835C2862F2C8009AA72F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2666835D2862F396009AA72F /* DiaryViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +167,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2666834F2862EB93009AA72F /* ContentView.swift in Sources */,
+				2666834F2862EB93009AA72F /* HomeView.swift in Sources */,
+				266683602862F3F1009AA72F /* DiaryModel.swift in Sources */,
 				2666834D2862EB93009AA72F /* PhotoDiaryApp.swift in Sources */,
+				2666835E2862F396009AA72F /* DiaryViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
