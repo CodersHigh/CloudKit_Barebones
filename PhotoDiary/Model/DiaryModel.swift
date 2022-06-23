@@ -14,9 +14,11 @@ class Diary: Identifiable, ObservableObject {
     let photo: UIImage
     let title: String
     let content: String
-    let date: Date
+    let date: String
     
     init(record: CKRecord) {
+        self.id = record.recordID
+        
         var photo: UIImage?
         let asset = record["photo"] as! CKAsset
         do {
@@ -25,10 +27,15 @@ class Diary: Identifiable, ObservableObject {
         } catch {
             print("load image error")
         }
-        self.id = record.recordID
         self.photo = photo ?? UIImage()
+        
         self.title = record["title"] as! String
         self.content = record["content"] as! String
-        self.date = record["date"] as! Date
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY년 MM월 dd일"
+        let date = record["date"] as! Date
+        let displayDate = dateFormatter.string(from: date)
+        self.date = displayDate
     }
 }
