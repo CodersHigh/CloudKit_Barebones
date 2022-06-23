@@ -28,7 +28,7 @@ struct HomeView: View {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
-                            // delete 메소드 호출
+                            viewModel.deleteDiary(id: diary.id, completion: viewModel.fetchDiary)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
@@ -50,6 +50,7 @@ struct HomeView: View {
             }
         }
     }
+    
 }
 
 struct HomeView_Previews: PreviewProvider {

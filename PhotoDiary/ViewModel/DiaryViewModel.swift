@@ -19,7 +19,7 @@ class DiaryViewModel: ObservableObject {
         CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) {
             records, error in
             if let error = error {
-                print("에러다!!: \(error.localizedDescription)")
+                print("fetch error: \(error.localizedDescription)")
                 return
             }
             guard let records = records else { return }
@@ -39,8 +39,13 @@ class DiaryViewModel: ObservableObject {
         
     }
     
-    func deleteDiary(id: String) {
-        
+    func deleteDiary(id: CKRecord.ID, completion: @escaping () -> Void) {
+        CKContainer.default().publicCloudDatabase.delete(withRecordID: id) { deletedRecordId, error  in
+            if let error = error {
+                print("delete error: \(error.localizedDescription)")
+            }
+            completion()
+        }
     }
     
 }
