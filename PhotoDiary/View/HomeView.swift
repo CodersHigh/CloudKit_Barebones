@@ -14,30 +14,40 @@ struct HomeView: View {
         NavigationView {
             VStack {
                 List(viewModel.diaries) { diary in
-                    VStack {
-                        Image(uiImage: UIImage() ?? UIImage())
-                            .resizable()
-                            .scaledToFill()
-                        Text("일기 제목")
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .padding(.bottom, 1)
-                        Text("날짜")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    NavigationLink(destination: DetailView(diary: diary)) {
+                        VStack {
+                            Text(diary.title)
+                                .font(.title3)
+                                .foregroundColor(.primary)
+                                .padding(.bottom, 1)
+                                .padding(.top, 2)
+                            Image(uiImage: diary.photo )
+                                .resizable()
+                                .scaledToFill()
+                        }
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            // delete 메소드 호출
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
                 Spacer()
                 Button {
                     
                 } label: {
-                    Text("다이어리 쓰기")
+                    Text("다이어리 작성")
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.bottom, 10)
             }
             .navigationTitle("My Photo Diary")
             .navigationViewStyle(.stack)
+            .onAppear() {
+                viewModel.fetchDiary()
+            }
         }
     }
 }
