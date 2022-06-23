@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct DetailView: View {
     @ObservedObject var diary: Diary
@@ -15,8 +16,4 @@ struct DetailView: View {
     }
 }
 
-struct DetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailView(diary: Diary(photo: UIImage(), title: "", content: "", date: Date()))
-    }
-}
+

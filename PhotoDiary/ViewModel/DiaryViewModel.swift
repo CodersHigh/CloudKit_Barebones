@@ -25,18 +25,7 @@ class DiaryViewModel: ObservableObject {
             guard let records = records else { return }
             DispatchQueue.main.async {
                 self.diaries = records.map { record in
-                    var photo: UIImage?
-                    let asset = record["photo"] as! CKAsset
-                    do {
-                        let imageData = try Data(contentsOf: asset.fileURL!)
-                        photo = UIImage(data: imageData)
-                    } catch {
-                        print("사진 받다가 에러 났어!")
-                    }
-                    let title = record["title"] as! String
-                    let content = record["content"] as! String
-                    let date = record["date"] as! Date
-                    return Diary(photo: photo ?? UIImage(), title: title, content: content, date: date)
+                    return Diary(record: record)
                 }
             }
         }
