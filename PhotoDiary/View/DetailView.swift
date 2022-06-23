@@ -12,7 +12,34 @@ struct DetailView: View {
     @ObservedObject var diary: Diary
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Form {
+                Section {
+                    Image(uiImage: diary.photo)
+                        .resizable()
+                        .scaledToFit()
+                }
+                Section {
+                    VStack {
+                        Text(diary.title)
+                            .padding(.bottom, 5)
+                            .font(.title)
+                        Text(diary.content)
+                    }
+                }
+                Section {
+                    Text(diary.date)
+                }
+            }
+            Spacer()
+            Button {
+                
+            } label: {
+                Text("다이어리 수정")
+            }
+            .buttonStyle(.borderedProminent)
+            .padding(.bottom, 10)
+        }
     }
 }
 
