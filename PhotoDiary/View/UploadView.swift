@@ -9,8 +9,11 @@ import SwiftUI
 
 struct UploadView: View {
     @State private var photo: Image?
-    @State private var showImagePicker = false
     @State private var inputImage: UIImage?
+    @State private var showingImagePicker = false
+    @State private var title: String = ""
+    @State private var content: String = ""
+    @State private var showingAlert = false
     
     var body: some View {
         NavigationView {
@@ -18,18 +21,39 @@ struct UploadView: View {
                 Section {
                     if photo == nil {
                         Button {
-                            showImagePicker = true
+                            showingImagePicker = true
                         } label: {
                             Text("사진을 추가하자")
                         }
                     }
                     photo?.resizable().scaledToFit()
                 }
+                Section {
+                    TextField("오늘의 제목", text: $title)
+                }
+                Section {
+                    TextField("오늘 어떤 일이 있었나요?", text: $content)
+                }
             }
-            .sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
+            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: $inputImage)
             }
             .navigationTitle("New Diary")
+        }
+        Spacer()
+        Button {
+            if photo == nil || title.isEmpty || content.isEmpty {
+                showingAlert = true
+            } else {
+                // upload 메소드 호출
+            }
+        } label: {
+            Text("작성 완료")
+        }
+        .buttonStyle(.borderedProminent)
+        .padding(.bottom, 10)
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("업로드 불가"), message: Text("아직 다이어리를 다 작성하지 못했어요."), dismissButton: .cancel(Text("확인")))
         }
     }
     

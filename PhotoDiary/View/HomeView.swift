@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel = DiaryViewModel()
-    @State private var showUploadSheet = false
+    @State private var showingUploadSheet = false
     
     var body: some View {
         NavigationView {
@@ -37,7 +37,7 @@ struct HomeView: View {
                 }
                 Spacer()
                 Button {
-                    showUploadSheet.toggle()
+                    showingUploadSheet.toggle()
                 } label: {
                     Text("다이어리 작성")
                 }
@@ -49,7 +49,7 @@ struct HomeView: View {
             .onAppear() {
                 viewModel.fetchDiary()
             }
-            .sheet(isPresented: $showUploadSheet, content: {
+            .sheet(isPresented: $showingUploadSheet, content: {
                 UploadView()
             })
         }
