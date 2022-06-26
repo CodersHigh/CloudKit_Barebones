@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 import UIKit
+import SwiftUI
 
 class DiaryViewModel: ObservableObject {
     @Published var diaries = [Diary]()
@@ -21,7 +22,7 @@ class DiaryViewModel: ObservableObject {
             if let error = error {
                 print("fetch error: \(error.localizedDescription)")
                 return
-            }
+            } 
             guard let records = records else { return }
             DispatchQueue.main.async {
                 self.diaries = records.map { record in
@@ -31,20 +32,40 @@ class DiaryViewModel: ObservableObject {
         }
     }
     
-    func uploadDiary(title: String, content: String) {
+    func uploadDiary(photo: UIImage, title: String, content: String) {
+        let record = CKRecord(recordType: "Diary")
         
+        // photo
+        guard let imageData = photo.jpegData(compressionQuality: 1.0) else { return }
+        let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("photo")
+        do {
+            try imageData.write(to: url!)
+            let asset = CKAsset(fileURL: url!)
+            record.setValue(asset, forKey: "photo")
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        record.setValue(Date(), forKey: "date")
+        record.setValue(title, forKey: "title")
+        record.setValue(content, forKey: "content")
+        CKContainer.default().publicCloudDatabase.save(record) { savedRecord, error in
+            if let error = error {
+                print("upload error: \(error.localizedDescription)")
+            }
+            self.fetchDiary()
+        }
     }
     
     func updateDiary(id: String, title: String, content: String) {
         
     }
     
-    func deleteDiary(id: CKRecord.ID, completion: @escaping () -> Void) {
+    func deleteDiary(id: CKRecord.ID) {
         CKContainer.default().publicCloudDatabase.delete(withRecordID: id) { deletedRecordId, error  in
             if let error = error {
                 print("delete error: \(error.localizedDescription)")
             }
-            completion()
+            self.fetchDiary()
         }
     }
     

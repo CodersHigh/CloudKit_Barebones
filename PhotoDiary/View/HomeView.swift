@@ -29,7 +29,7 @@ struct HomeView: View {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
-                            viewModel.deleteDiary(id: diary.id, completion: viewModel.fetchDiary)
+                            viewModel.deleteDiary(id: diary.id)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
