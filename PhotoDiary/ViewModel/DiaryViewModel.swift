@@ -35,14 +35,13 @@ class DiaryViewModel: ObservableObject {
     func uploadDiary(photo: UIImage, title: String, content: String) {
         let record = CKRecord(recordType: "Diary")
         
-        // photo
         guard let imageData = photo.jpegData(compressionQuality: 1.0) else { return }
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("photo")
         do {
             try imageData.write(to: url!)
             let asset = CKAsset(fileURL: url!)
             record.setValue(asset, forKey: "photo")
-        } catch let error {
+        } catch {
             print(error.localizedDescription)
         }
         record.setValue(Date(), forKey: "date")
@@ -56,8 +55,30 @@ class DiaryViewModel: ObservableObject {
         }
     }
     
-    func updateDiary(id: String, title: String, content: String) {
-        
+    func updateDiary(id: CKRecord.ID, photo: UIImage, title: String, content: String) {
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { updatedRecord, error in
+            if let error = error {
+                print("update error: \(error.localizedDescription)")
+            }
+            guard let imageData = photo.jpegData(compressionQuality: 1.0) else { return }
+            let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("photo")
+            do {
+                try imageData.write(to: url!)
+                let asset = CKAsset(fileURL: url!)
+                updatedRecord?.setValue(asset, forKey: "photo")
+            } catch {
+                print(error.localizedDescription)
+            }
+            updatedRecord?.setValue(Date(), forKey: "date")
+            updatedRecord?.setValue(title, forKey: "title")
+            updatedRecord?.setValue(content, forKey: "content")
+            CKContainer.default().publicCloudDatabase.save(updatedRecord!) { savedRecord, error in
+                if let error = error {
+                    print("update error: \(error.localizedDescription)")
+                }
+                self.fetchDiary()
+            }
+        }
     }
     
     func deleteDiary(id: CKRecord.ID) {
