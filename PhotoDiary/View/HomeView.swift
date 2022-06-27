@@ -18,10 +18,8 @@ struct HomeView: View {
                     NavigationLink(destination: DetailView(diary: diary)) {
                         VStack {
                             Text(diary.title)
-                                .font(.title3)
+                                .font(.title3.bold())
                                 .foregroundColor(.primary)
-                                .padding(.bottom, 1)
-                                .padding(.top, 2)
                             Image(uiImage: diary.photo )
                                 .resizable()
                                 .scaledToFill()

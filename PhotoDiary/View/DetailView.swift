@@ -10,6 +10,7 @@ import CloudKit
 
 struct DetailView: View {
     @ObservedObject var diary: Diary
+    @State private var showingUpdateSheet = false
     
     var body: some View {
         VStack {
@@ -20,26 +21,36 @@ struct DetailView: View {
                         .scaledToFit()
                 }
                 Section {
-                    VStack {
+                    VStack(alignment: .leading) {
                         Text(diary.title)
-                            .padding(.bottom, 5)
-                            .font(.title)
+                            .font(.title3.bold())
+                            .padding(.top, 10)
+                            .padding(.bottom, 2)
                         Text(diary.content)
+                            .font(.body)
+                            .padding(.bottom, 10)
+                            .lineLimit(nil)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 Section {
                     Text(diary.date)
+                        .foregroundColor(.gray)
                 }
             }
             Spacer()
             Button {
-                
+                showingUpdateSheet.toggle()
             } label: {
                 Text("다이어리 수정")
             }
             .buttonStyle(.borderedProminent)
             .padding(.bottom, 10)
         }
+        .sheet(isPresented: $showingUpdateSheet, content: {
+            UpdateView(diary: diary)
+        })
     }
 }
 
