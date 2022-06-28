@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UploadView: View {
-    @ObservedObject var viewModel = DiaryViewModel()
+    @ObservedObject var diaryViewModel: DiaryViewModel
     @State private var photo: UIImage?
     @State private var inputImage: UIImage?
     @State private var showingImagePicker = false
@@ -21,16 +21,14 @@ struct UploadView: View {
         NavigationView {
             Form {
                 Section {
-                    if photo == nil {
-                        Button {
-                            showingImagePicker = true
-                        } label: {
-                            Text("사진을 추가하자")
+                    Button(action: {
+                        showingImagePicker = true
+                    }) {
+                        if photo == nil {
+                            Text("사진을 추가해")
+                        } else {
+                            Image(uiImage: photo!).resizable().scaledToFill()
                         }
-                    } else {
-                        Image(uiImage: photo!)
-                            .resizable()
-                            .scaledToFill()
                     }
                 }
                 Section {
@@ -50,8 +48,9 @@ struct UploadView: View {
             if photo == nil || title.isEmpty || content.isEmpty {
                 showingAlert = true
             } else {
-                viewModel.uploadDiary(photo: photo!, title: title, content: content)
+                diaryViewModel.uploadDiary(photo: photo!, title: title, content: content)
                 self.presentationMode.wrappedValue.dismiss()
+                diaryViewModel.fetchDiary()
             }
         } label: {
             Text("작성 완료")
@@ -66,11 +65,5 @@ struct UploadView: View {
     private func loadImage() {
         guard let inputImage = inputImage else { return }
         photo = inputImage
-    }
-}
-
-struct UploadView_Previews: PreviewProvider {
-    static var previews: some View {
-        UploadView()
     }
 }

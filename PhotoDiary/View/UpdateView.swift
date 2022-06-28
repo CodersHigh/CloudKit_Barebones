@@ -8,42 +8,31 @@
 import SwiftUI
 
 struct UpdateView: View {
-    @ObservedObject var viewModel = DiaryViewModel()
+    @ObservedObject var diaryViewModel: DiaryViewModel
     @ObservedObject var diary: Diary
-    @State private var photo: UIImage?
     @State private var inputImage: UIImage?
     @State private var showingImagePicker = false
-    @State private var title: String = ""
-    @State private var content: String = ""
     @State private var showingAlert = false
+    @State var photo: UIImage
+    @State var title: String
+    @State var content: String
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    VStack {
-                        if photo == nil {
-                            Image(uiImage: diary.photo).resizable().scaledToFill()
-                        } else {
-                            Image(uiImage: photo!).resizable().scaledToFill()
-                        }
-                        Button {
-                            showingImagePicker = true
-                        } label: {
-                            Text("사진을 변경하자")
-                        }
+                    Button(action: {
+                        showingImagePicker = true
+                    }) {
+                        Image(uiImage: photo).resizable().scaledToFill()
                     }
                 }
                 Section {
-                    Section {
-                        TextField(diary.title, text: $title)
-                    }
+                    TextField(diary.title, text: $title)
                 }
                 Section {
-                    Section {
-                        TextField(diary.content, text: $content)
-                    }
+                    TextField(diary.content, text: $content)
                 }
             }
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
@@ -53,11 +42,12 @@ struct UpdateView: View {
         }
         Spacer()
         Button {
-            if photo == nil || title.isEmpty || content.isEmpty {
+            if title.isEmpty || content.isEmpty {
                 showingAlert = true
             } else {
-                viewModel.updateDiary(id: diary.id, photo: photo!, title: title, content: content)
+                diaryViewModel.updateDiary(id: diary.id, photo: photo, title: title, content: content)
                 self.presentationMode.wrappedValue.dismiss()
+                diaryViewModel.fetchDiary()
             }
         } label: {
             Text("수정 완료")
