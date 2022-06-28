@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var viewModel = DiaryViewModel()
+    @StateObject var diaryViewModel = DiaryViewModel()
     @State private var showingUploadSheet = false
     
     var body: some View {
         NavigationView {
             VStack {
-                List(viewModel.diaries) { diary in
-                    NavigationLink(destination: DetailView(diary: diary)) {
+                List(diaryViewModel.diaries) { diary in
+                    NavigationLink(destination: DetailView(diaryViewModel: diaryViewModel, diary: diary)) {
                         VStack {
                             Text(diary.title)
                                 .font(.title3.bold())
@@ -27,7 +27,7 @@ struct HomeView: View {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
-                            viewModel.deleteDiary(id: diary.id)
+                            diaryViewModel.deleteDiary(id: diary.id)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
@@ -45,10 +45,10 @@ struct HomeView: View {
             .navigationTitle("My Photo Diary")
             .navigationViewStyle(.stack)
             .onAppear() {
-                viewModel.fetchDiary()
+                diaryViewModel.fetchDiary()
             }
             .sheet(isPresented: $showingUploadSheet, content: {
-                UploadView()
+                UploadView(diaryViewModel: diaryViewModel)
             })
         }
     }

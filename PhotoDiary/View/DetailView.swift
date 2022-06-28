@@ -9,6 +9,7 @@ import SwiftUI
 import CloudKit
 
 struct DetailView: View {
+    @ObservedObject var diaryViewModel: DiaryViewModel
     @ObservedObject var diary: Diary
     @State private var showingUpdateSheet = false
     
@@ -49,7 +50,8 @@ struct DetailView: View {
             .padding(.bottom, 10)
         }
         .sheet(isPresented: $showingUpdateSheet, content: {
-            UpdateView(diary: diary)
+            //UpdateView(diary: diary)
+            UpdateView(diaryViewModel: diaryViewModel, diary: diary, photo: diary.photo, title: diary.title, content: diary.content)
         })
     }
 }
