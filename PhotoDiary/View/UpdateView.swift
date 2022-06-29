@@ -12,7 +12,6 @@ struct UpdateView: View {
     @ObservedObject var diary: Diary
     @State private var inputImage: UIImage?
     @State private var showingImagePicker = false
-    @State private var showingAlert = false
     @State var photo: UIImage
     @State var title: String
     @State var content: String
@@ -42,21 +41,14 @@ struct UpdateView: View {
         }
         Spacer()
         Button {
-            if title.isEmpty || content.isEmpty {
-                showingAlert = true
-            } else {
-                diaryViewModel.updateDiary(id: diary.id, photo: photo, title: title, content: content)
-                self.presentationMode.wrappedValue.dismiss()
-                diaryViewModel.fetchDiary()
-            }
+            diaryViewModel.updateDiary(id: diary.id, photo: photo, title: title, content: content)
+            self.presentationMode.wrappedValue.dismiss()
         } label: {
             Text("수정 완료")
         }
         .buttonStyle(.borderedProminent)
+        .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || content.trimmingCharacters(in: .whitespaces).isEmpty)
         .padding(.bottom, 10)
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("업로드 불가"), message: Text("아직 다이어리를 다 작성하지 못했어요."), dismissButton: .cancel(Text("확인")))
-        }
     }
     
     private func loadImage() {

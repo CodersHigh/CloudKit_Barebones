@@ -14,7 +14,6 @@ struct UploadView: View {
     @State private var showingImagePicker = false
     @State private var title: String = ""
     @State private var content: String = ""
-    @State private var showingAlert = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -45,20 +44,14 @@ struct UploadView: View {
         }
         Spacer()
         Button {
-            if photo == nil || title.isEmpty || content.isEmpty {
-                showingAlert = true
-            } else {
-                diaryViewModel.uploadDiary(photo: photo!, title: title, content: content)
-                self.presentationMode.wrappedValue.dismiss()
-            }
+            diaryViewModel.uploadDiary(photo: photo!, title: title, content: content)
+            self.presentationMode.wrappedValue.dismiss()
         } label: {
             Text("작성 완료")
         }
         .buttonStyle(.borderedProminent)
+        .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || content.trimmingCharacters(in: .whitespaces).isEmpty || photo == nil)
         .padding(.bottom, 10)
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("업로드 불가"), message: Text("아직 다이어리를 다 작성하지 못했어요."), dismissButton: .cancel(Text("확인")))
-        }
     }
     
     private func loadImage() {
