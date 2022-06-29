@@ -50,7 +50,6 @@ struct UploadView: View {
             } else {
                 diaryViewModel.uploadDiary(photo: photo!, title: title, content: content)
                 self.presentationMode.wrappedValue.dismiss()
-                diaryViewModel.fetchDiary()
             }
         } label: {
             Text("작성 완료")
