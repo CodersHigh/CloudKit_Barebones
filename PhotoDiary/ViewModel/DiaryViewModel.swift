@@ -62,6 +62,7 @@ class DiaryViewModel: ObservableObject {
         record.setValue(Date(), forKey: "date")
         record.setValue(title, forKey: "title")
         record.setValue(content, forKey: "content")
+        
         CKContainer.default().publicCloudDatabase.save(record) { newRecord, error in
             if let error = error {
                 print(error)
@@ -77,9 +78,11 @@ class DiaryViewModel: ObservableObject {
     
     func updateDiary(id: CKRecord.ID, photo: UIImage, title: String, content: String) {
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { updatedRecord, error in
+            
             if let error = error {
-                print("update error: \(error.localizedDescription)")
+                print(error)
             }
+            
             guard let imageData = photo.jpegData(compressionQuality: 1.0) else { return }
             let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("photo")
             do {
@@ -87,16 +90,26 @@ class DiaryViewModel: ObservableObject {
                 let asset = CKAsset(fileURL: url!)
                 updatedRecord?.setValue(asset, forKey: "photo")
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
             updatedRecord?.setValue(Date(), forKey: "date")
             updatedRecord?.setValue(title, forKey: "title")
             updatedRecord?.setValue(content, forKey: "content")
-            CKContainer.default().publicCloudDatabase.save(updatedRecord!) { savedRecord, error in
+            
+            CKContainer.default().publicCloudDatabase.save(updatedRecord!) { newRecord, error in
                 if let error = error {
-                    print("update error: \(error.localizedDescription)")
+                    print(error)
+                } else {
+                    if let updatedRecord = updatedRecord {
+                        DispatchQueue.main.async {
+                            for (index, diary) in self.diaries.enumerated() {
+                                if diary.id == updatedRecord.recordID {
+                                    self.diaries[index] = Diary(record: updatedRecord)
+                                }
+                            }
+                        }
+                    }
                 }
-                self.fetchDiary()
             }
         }
     }
@@ -104,9 +117,10 @@ class DiaryViewModel: ObservableObject {
     func deleteDiary(id: CKRecord.ID) {
         CKContainer.default().publicCloudDatabase.delete(withRecordID: id) { deletedRecordId, error  in
             if let error = error {
-                print("delete error: \(error.localizedDescription)")
+                print(error)
+            } else {
+                self.fetchDiary()
             }
-            self.fetchDiary()
         }
     }
     
