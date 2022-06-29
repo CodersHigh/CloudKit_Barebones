@@ -92,7 +92,6 @@ class DiaryViewModel: ObservableObject {
             } catch {
                 print(error)
             }
-            updatedRecord?.setValue(Date(), forKey: "date")
             updatedRecord?.setValue(title, forKey: "title")
             updatedRecord?.setValue(content, forKey: "content")
             
