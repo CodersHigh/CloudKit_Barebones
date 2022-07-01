@@ -10,7 +10,7 @@
 ### CloudKit이란?   
 iCloud를 기반으로 사용자의 iCloud 계정을 통해 앱 데이터를 저장하고 공유할 수 있는 Apple의 원격 데이터 저장 서비스입니다.    
 많은 데이터를 사용하지만, 많은 양의 서버 측 로직이 필요하지 않은 iOS 전용 앱에서 사용하기 좋습니다.     
-CloudKit을 사용하려면, 우선 [iCloud 연동 방법](https://codershigh.notion.site/CloudKit-iCloud-e77b746fb3d6478fa7cc49b262dd3e4f)에 대해 살펴보세요.  
+CloudKit을 사용하려면, 우선 [iCloud 연동 및 CloudKit Console 초기 세팅](https://codershigh.notion.site/CloudKit-iCloud-e77b746fb3d6478fa7cc49b262dd3e4f)에 대해 살펴보세요.  
 
 **추가 참고 사항**    
 CloudKit에는 3가지 종류의 데이터베이스가 있고, 상황에 따라 적합한 것을 사용할 수 있습니다.
@@ -95,7 +95,9 @@ func uploadDiary(photo: UIImage, title: String, content: String) {
     }
 }
 ```
-- `fetchDiary()` 를 사용하지 않고, ‘@Published 변수 diaries’에 추가해 줌으로써 새로운 레코드를 화면에 불러오는 이유는 : 새로운 레코드가 추가된 즉시 화면에 바로 업데이트하기 위해서에요. `fetchDiary()` 를 호출하면, 새로운 레코드가 CloudKit DB에 저장되지도 않았는데 데이터를 불러오는 상황이 되어 추가된 레코드가 화면에 바로 반영되지 않습니다 🚨
+- `fetchDiary()` 를 사용하지 않고, ‘@Published 변수 diaries’에 추가해 줌으로써 새로운 레코드를 화면에 불러오는 이유는 :    
+새로운 레코드가 추가된 즉시 화면에 바로 업데이트하기 위함입니다.. `fetchDiary()` 를 호출하면, 새로운 레코드가 CloudKit DB에 저장되지도 않았는데    
+데이터를 불러오는 상황이 되어 추가된 레코드가 화면에 바로 반영되지 않습니다 🚨
 ```Swift
 // 데이터 수정하기 
 func updateDiary(id: CKRecord.ID, photo: UIImage, title: String, content: String) {
@@ -141,7 +143,7 @@ func updateDiary(id: CKRecord.ID, photo: UIImage, title: String, content: String
     }
 }
 ```
-- 여기서도 `fetchDiary()` 를 호출하지 않고,  self.diaries[index]를 활용한 이유도 ‘데이터 추가하기’ 부분에서 설명한 이유와 같아요.
+- 여기서 `fetchDiary()` 를 호출하지 않고,  self.diaries[index]를 활용한 이유도 ‘데이터 추가하기’ 부분에서 설명한 이유와 같습니다. 
 ```Swift
 // 데이터 삭제하기 
 func deleteDiary(id: CKRecord.ID) {
@@ -154,4 +156,11 @@ func deleteDiary(id: CKRecord.ID) {
     }
 }
 ```
-- 데이터를 삭제하는 경우에는 upload 및 update와 달리 CloudKit에 삭제가 반영된 이후에 `fetchDiary()`가 호출되기 때문에, `fetchDiary()`를 사용해도 삭제한 레코드가 화면에서 즉시 사라져요.
+- 데이터를 삭제하는 경우에는 upload 및 update와 달리 CloudKit에 삭제가 반영된 이후에 `fetchDiary()`가 호출되기 때문에, `fetchDiary()`를 사용해도 삭제한 레코드가 화면에서 즉시 사라집니다. 
+<br/>
+
+### [CloudKit Console](https://icloud.developer.apple.com/dashboard/home/teams/4QG3GC35LA)
+앱의 서버 활동을 보고, 컨테이너를 관리하고, 데이터베이스 스키마를 유지하고, 테스트 데이터를 보고 편집할 수 있는 **직관적인 웹 기반 제어판**입니다.    
+CloudKIt Console에서 살펴 볼 수 있는, CloudKit Database의 예시입니다. (해당 프로젝트의 데이터베이스 사진입니다.)
+
+<img width="1440" alt="스크린샷 2022-06-30 오후 4 58 30" src="https://user-images.githubusercontent.com/74223246/176799531-3e100e84-9c5c-4674-967e-76cb77f559b7.png">
