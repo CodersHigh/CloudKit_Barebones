@@ -47,7 +47,7 @@ class DiaryViewModel: ObservableObject {
         }
     }
     
-    func uploadDiary(photo: UIImage, title: String, content: String) {
+    func uploadDiary(photo: UIImage, title: String, content: String, completion: @escaping (Bool) -> Void) {
         let record = CKRecord(recordType: RecordType.diary.rawValue)
         
         guard let imageData = photo.jpegData(compressionQuality: 1.0) else { return }
@@ -66,17 +66,19 @@ class DiaryViewModel: ObservableObject {
         CKContainer.default().publicCloudDatabase.save(record) { newRecord, error in
             if let error = error {
                 print(error)
+                completion(false)
             } else {
                 if let newRecord = newRecord {
                     DispatchQueue.main.async {
                         self.diaries.insert(Diary(record: newRecord), at: 0)
                     }
+                    completion(true)
                 }
             }
         }
     }
     
-    func updateDiary(id: CKRecord.ID, photo: UIImage, title: String, content: String) {
+    func updateDiary(id: CKRecord.ID, photo: UIImage, title: String, content: String, completion: @escaping (Bool) -> Void) {
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { updatedRecord, error in
             
             if let error = error {
@@ -98,6 +100,7 @@ class DiaryViewModel: ObservableObject {
             CKContainer.default().publicCloudDatabase.save(updatedRecord!) { newRecord, error in
                 if let error = error {
                     print(error)
+                    completion(false)
                 } else {
                     if let updatedRecord = updatedRecord {
                         DispatchQueue.main.async {
@@ -107,18 +110,20 @@ class DiaryViewModel: ObservableObject {
                                 }
                             }
                         }
+                        completion(true)
                     }
                 }
             }
         }
     }
     
-    func deleteDiary(id: CKRecord.ID) {
+    func deleteDiary(id: CKRecord.ID, completion: @escaping (Bool) -> Void) {
         CKContainer.default().publicCloudDatabase.delete(withRecordID: id) { deletedRecordId, error  in
             if let error = error {
                 print(error)
+                completion(false)
             } else {
-                self.fetchDiary()
+                completion(true)
             }
         }
     }

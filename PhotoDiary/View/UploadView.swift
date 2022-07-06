@@ -12,6 +12,7 @@ struct UploadView: View {
     @State private var photo: UIImage?
     @State private var inputImage: UIImage?
     @State private var showingImagePicker = false
+    @State private var showingAlert = false
     @State private var title: String = ""
     @State private var content: String = ""
     @Environment(\.presentationMode) var presentationMode
@@ -44,14 +45,23 @@ struct UploadView: View {
         }
         Spacer()
         Button {
-            diaryViewModel.uploadDiary(photo: photo!, title: title, content: content)
-            self.presentationMode.wrappedValue.dismiss()
+            diaryViewModel.uploadDiary(photo: photo!, title: title, content: content) { loginICloud in
+                switch loginICloud {
+                case true :
+                    self.presentationMode.wrappedValue.dismiss()
+                case false :
+                    self.showingAlert = true
+                }
+            }
         } label: {
             Text("작성 완료")
         }
         .buttonStyle(.borderedProminent)
         .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || content.trimmingCharacters(in: .whitespaces).isEmpty || photo == nil)
         .padding(.bottom, 10)
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("업로드 불가"), message: Text("기기에서 iCloud 계정으로 로그인 되어 있는지 확인하세요."), dismissButton: .default(Text("확인")))
+        }
     }
     
     private func loadImage() {
