@@ -56,7 +56,7 @@ struct HomeView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.bottom, 10)
             }
-            .navigationTitle("My Photo Diary")
+            .navigationTitle("Photo Diary")
             .navigationViewStyle(.stack)
             .onAppear() {
                 diaryViewModel.fetchDiary()
