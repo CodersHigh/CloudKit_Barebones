@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @StateObject var diaryViewModel = DiaryViewModel()
     @State private var showingUploadSheet = false
+    @State private var showingAlert = false
     
     var body: some View {
         NavigationView {
@@ -20,6 +21,9 @@ struct HomeView: View {
                             Text(diary.title)
                                 .font(.title3.bold())
                                 .foregroundColor(.primary)
+                            Text(diary.date)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                             Image(uiImage: diary.photo )
                                 .resizable()
                                 .scaledToFill()
@@ -27,10 +31,20 @@ struct HomeView: View {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
-                            diaryViewModel.deleteDiary(id: diary.id)
+                            diaryViewModel.deleteDiary(id: diary.id) { isWriter in
+                                switch isWriter {
+                                case true:
+                                    diaryViewModel.fetchDiary()
+                                case false:
+                                    self.showingAlert = true
+                                }
+                            }
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
+                    }
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("삭제 불가"), message: Text("이 다이어리를 생성한 본인이 아니기 때문에 삭제할 수 없습니다."), dismissButton: .default(Text("확인")))
                     }
                 }
                 Spacer()
